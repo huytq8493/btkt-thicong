@@ -36,7 +36,7 @@ body{background:var(--bg);color:var(--tx);font:13px/1.45 -apple-system,BlinkMacS
 .btn:disabled{opacity:.5;cursor:default}
 
 /* ---------- kpi ---------- */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(166px,1fr));gap:9px;margin-bottom:14px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px;box-shadow:var(--sh)}
 .kpi .lb{font-size:11px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
 .kpi .vl{font-size:24px;font-weight:800;margin-top:3px;letter-spacing:-.5px}
@@ -275,7 +275,7 @@ tbody tr.hid td.c0 .mbn{opacity:.5;text-decoration:line-through}
      · khai_truong / nhan_nha — dùng chung với app tiến độ nhận nhà
      · stages / tien_do — ghi ngược để app cũ vẫn đọc đúng
    ============================================================ */
-const APP_BUILD='2026-09-05 12:50';   // TĂNG MỖI LẦN SỬA FILE
+const APP_BUILD='2026-09-05 13:20';   // TĂNG MỖI LẦN SỬA FILE
 
 const SB_URL='https://rnzawekklwfpndgloppw.supabase.co';
 const SB_KEY='sb_publishable_yTWcRJf3fAqaDbTRSM1lfA_gHlUiKNZ';
@@ -487,14 +487,15 @@ function renderKpi(){
   const noTour=b.filter(x=>!x.tour).length;
   const running=b.filter(x=>x.dangTC).length;
   const startSoon=b.filter(x=>x.dToBd!=null&&x.dToBd>0&&x.dToBd<=7).length;
-  const startBad=b.filter(x=>x.dToBd!=null&&x.dToBd<=7&&x.p['s6'].st!==2).length;
+  const odsBad=b.filter(x=>x.dToBd!=null&&x.dToBd<=7&&x.p['s6'].st!==2).length;
   document.getElementById('kpis').innerHTML=[
     ['Mặt bằng đang chạy',b.length,'chưa khai trương',''],
     ['Hoàn thành trung bình',avg+'%',b.length+' mặt bằng đang chạy',avg>=70?'ok':''],
     ['Khai trương ≤ 14 ngày',soon.length,soonBad?soonBad+' cái tiến độ dưới 80%':'đều trên 80%',soonBad?'warn':'ok'],
     ['Thiếu ngày thi công',late,'quỹ ngày tới khai trương không đủ',late?'warn':'ok'],
     ['Đang thi công',running,'đội BT đã vào công trình',''],
-    ['Khởi công trong 7 ngày',startSoon,startBad?startBad+' cái chưa đẩy Task ODS':'đã đẩy Task ODS đủ',startBad?'warn':'ok'],
+    ['Khởi công trong 7 ngày',startSoon,'đội BT sắp vào công trình',''],
+    ['Chưa đẩy Task ODS',odsBad,'trong nhóm đã/sắp thi công',odsBad?'warn':'ok'],
     ['Chưa có trong ma trận',noTour,noTour?'chưa xếp chuyến thi công':'đã xếp lịch đủ',noTour?'warn':'ok'],
     ['Bước tắc nhiều nhất',worst.c,worst.n,worst.c?'warn':''],
   ].map(([l,v,n,c])=>`<div class="kpi ${c}"><div class="lb">${l}</div><div class="vl">${v}</div><div class="nt">${esc(n)}</div></div>`).join('');

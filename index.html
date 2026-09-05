@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tiến độ thi công mặt bằng — P. Bảo trì Kỹ thuật</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#fff; --line:#e3e8f0; --line2:#eef2f7;
+  --tx:#111827; --tx2:#5b6675; --tx3:#8b95a5;
+  --brand:#1d4ed8; --brand-s:#eff4ff;
+  --done:#16a34a; --done-b:#dcfce7;
+  --doing:#d97706; --doing-b:#fef3c7;
+  --none:#cbd5e1; --none-b:#f8fafc;
+  --na:#94a3b8; --na-b:#f1f5f9;
+  --late:#dc2626; --late-b:#fee2e2;
+  --soon:#0891b2; --soon-b:#cffafe;
+  --sh:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1900px;margin:0 auto;padding:16px 16px 60px}
+
+/* ---------- header ---------- */
+.hd{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.hd h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.2px}
+.hd .sub{margin-top:3px;color:var(--tx2);font-size:12px}
+.hd .sub .bld{opacity:.6;font-weight:600}
+.hd .sp{flex:1}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--tx);border-radius:8px;padding:7px 12px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:var(--sh);display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.btn:hover{border-color:#c7d2e4;background:#fbfcfe}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.pri:hover{background:#1a44b8}
+.btn.gh{border-color:transparent;box-shadow:none;background:transparent;color:var(--tx2)}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* ---------- kpi ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px;box-shadow:var(--sh)}
+.kpi .lb{font-size:11px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.kpi .vl{font-size:24px;font-weight:800;margin-top:3px;letter-spacing:-.5px}
+.kpi .nt{font-size:11.5px;color:var(--tx3);margin-top:1px;line-height:1.3}
+.kpi.warn .vl{color:var(--late)}
+.kpi.ok .vl{color:var(--done)}
+
+/* ---------- toolbar ---------- */
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;box-shadow:var(--sh);white-space:nowrap}
+.chip:hover{border-color:#c7d2e4}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.chip .c{opacity:.65;font-weight:700;margin-left:3px}
+.sbox{position:relative}
+.sbox input{border:1px solid var(--line);border-radius:8px;padding:7px 10px 7px 30px;font-size:12.5px;width:250px;background:var(--card);box-shadow:var(--sh);outline:none;font-family:inherit}
+.sbox input:focus{border-color:var(--brand)}
+.sbox svg{position:absolute;left:9px;top:8px;width:14px;height:14px;stroke:var(--tx3);fill:none;stroke-width:2}
+.sw{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2);font-weight:600;cursor:pointer;user-select:none}
+.sw input{accent-color:var(--brand);width:14px;height:14px;cursor:pointer}
+
+/* ---------- legend ---------- */
+.lg{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--tx2);margin-bottom:10px}
+.lg b{font-weight:700;color:var(--tx)}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid rgba(0,0,0,.08)}
+
+/* ---------- matrix ---------- */
+.tbox{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);overflow:auto;max-height:calc(100vh - 300px)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;table-layout:fixed}
+th,td{border-bottom:1px solid var(--line2);border-right:1px solid var(--line2)}
+thead th{position:sticky;background:#f8fafc;z-index:3;font-weight:700;color:var(--tx2);padding:4px;text-align:center;vertical-align:bottom}
+thead tr.g th{top:0;background:#eef2f8;color:#475569}
+thead tr.g th.grp{height:34px;font-size:10px;letter-spacing:.2px;text-transform:uppercase;white-space:normal;line-height:1.25;vertical-align:middle}
+thead tr.g th.solo{background:#f8fafc;height:186px;font-size:11px;line-height:1.25;padding-bottom:7px}
+thead tr.s th{top:34px;height:152px;font-size:11px;line-height:1.25;padding-bottom:7px}
+thead th .vt{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;margin:0 auto;overflow:hidden;text-overflow:ellipsis}
+thead tr.g th.solo .vt{max-height:176px}
+thead tr.s th .vt{max-height:142px}
+
+/* sticky left block: tên · ngày khai trương · nhận nhà */
+th.c0,td.c0{position:sticky;left:0;width:296px;text-align:left}
+th.c1,td.c1{position:sticky;left:296px;width:80px}
+th.c2,td.c2{position:sticky;left:376px;width:80px}
+th.c3,td.c3{position:sticky;left:456px;width:104px;border-right:2px solid #cbd5e1}
+td.c0,td.c1,td.c2,td.c3{background:var(--card);z-index:2}
+thead th.c0,thead th.c1,thead th.c2,thead th.c3{z-index:6;background:#f8fafc}
+tbody tr:hover td{background:#fbfcff}
+tbody tr:hover td.c0,tbody tr:hover td.c1,tbody tr:hover td.c2,tbody tr:hover td.c3{background:#f5f8ff}
+td{padding:0;text-align:center;height:40px}
+
+.mbc{padding:6px 9px}
+.mbn{font-weight:700;font-size:12.5px;line-height:1.3;display:flex;align-items:flex-start;gap:5px}
+.mbn .st{color:var(--tx3);font-weight:700;font-size:11px;min-width:20px}
+.mbm{display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap}
+.tg{font-size:10.5px;font-weight:700;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.tg.late{background:var(--late-b);color:#991b1b}
+.tg.soon{background:var(--soon-b);color:#155e75}
+.tg.open{background:#e2e8f0;color:#475569}
+.tg.post{background:#fae8ff;color:#86198f}
+.tg.typ{background:var(--brand-s);color:#1e40af}
+.tg.tc{background:var(--doing-b);color:#92400e}
+.bar{height:5px;border-radius:3px;background:#eef2f7;overflow:hidden;margin-top:5px}
+.bar>i{display:block;height:100%;background:var(--done);border-radius:3px;transition:width .35s}
+.bar.low>i{background:var(--late)}
+.bar.mid>i{background:var(--doing)}
+.pct{font-size:10.5px;font-weight:800;color:var(--tx2);margin-left:auto}
+
+.dcell{width:100%;height:40px;border:0;background:transparent;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--tx)}
+.dcell .d1{font-size:11.5px;font-weight:700}
+.dcell .d2{font-size:9.5px;font-weight:700;color:var(--tx3)}
+.dcell.miss .d1{color:var(--tx3);font-weight:600}
+.dcell{position:relative}
+.src{position:absolute;top:2px;right:3px;font-size:8px;font-weight:900;letter-spacing:.2px;padding:0 3px;border-radius:3px;line-height:12px}
+.src.mt{background:#e2e8f0;color:#475569}
+.src.man{background:var(--brand-s);color:#1e40af}
+
+.cell{width:100%;height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;position:relative;border:0;background:transparent;font-family:inherit}
+.cell .mk{font-size:13px;font-weight:900;line-height:1}
+.cell .dd{font-size:9.5px;font-weight:700;opacity:.75;line-height:1}
+.cell .nz{position:absolute;top:3px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--brand)}
+.lk{position:absolute;top:1px;left:1px;width:15px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:9px;font-weight:900;color:#fff;background:var(--brand);text-decoration:none;opacity:.85}
+.lk:hover{opacity:1;transform:scale(1.12)}
+.lk.zl{background:#0068ff}
+td.s0{background:var(--none-b)} td.s0 .mk{color:var(--none)}
+td.s1{background:var(--doing-b)} td.s1 .mk{color:var(--doing)}
+td.s2{background:var(--done-b)} td.s2 .mk{color:var(--done)}
+td.s3{background:var(--na-b)} td.s3 .mk{color:var(--na)}
+td.sep,thead th.sep{border-right:2px solid #cbd5e1}
+tbody tr.hid td.c0 .mbn{opacity:.5;text-decoration:line-through}
+
+.empty{padding:36px;text-align:center;color:var(--tx3);font-size:13px}
+.loading{padding:36px;text-align:center;color:var(--tx2)}
+
+/* ---------- modal ---------- */
+.ov{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.ov.on{display:flex}
+.md{background:var(--card);border-radius:14px;width:100%;max-width:470px;box-shadow:0 20px 50px rgba(16,24,40,.24);overflow:hidden;max-height:94vh;display:flex;flex-direction:column}
+.md h3{margin:0;padding:14px 16px 10px;font-size:15px;font-weight:800}
+.md .who{padding:0 16px 12px;color:var(--tx2);font-size:12px;border-bottom:1px solid var(--line2)}
+.md .who b{color:var(--tx)}
+.md .bd{padding:14px 16px;overflow:auto}
+.md .desc{background:#f8fafc;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:11.5px;color:var(--tx2);line-height:1.5;margin-bottom:13px}
+.fl{margin-bottom:12px}
+.fl>label{display:block;font-size:11.5px;font-weight:700;color:var(--tx2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.opt{border:1.5px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--tx2);background:var(--card)}
+.opt:hover{border-color:#c7d2e4}
+.opt.on[data-v="0"]{border-color:var(--none);background:var(--none-b);color:#64748b}
+.opt.on[data-v="1"]{border-color:var(--doing);background:var(--doing-b);color:#92400e}
+.opt.on[data-v="2"]{border-color:var(--done);background:var(--done-b);color:#166534}
+.opt.on[data-v="3"]{border-color:var(--na);background:var(--na-b);color:#475569}
+.fl input,.fl textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;font-family:inherit;outline:none;background:var(--card);color:var(--tx)}
+.fl input:focus,.fl textarea:focus{border-color:var(--brand)}
+.fl textarea{resize:vertical;min-height:56px}
+.lrow{display:flex;gap:6px}
+.lrow .btn{flex:0 0 auto}
+.md .ft{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line2);background:#fbfcfe}
+.md .ft .sp{flex:1}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:#111827;color:#fff;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:600;z-index:99;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:#b91c1c}
+
+@media (max-width:900px){
+  th.c0,td.c0{width:170px} th.c1,td.c1{left:170px;width:64px} th.c2,td.c2{left:234px;width:64px} th.c3,td.c3{left:298px;width:70px}
+  .tbox{max-height:calc(100vh - 340px)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div>
+      <h1>Tiến độ thi công mặt bằng chi nhánh mới</h1>
+      <div class="sub" id="sub">Đang tải…</div>
+    </div>
+    <div class="sp"></div>
+    <button class="btn" id="btnCsv">⬇ Xuất CSV (đúng mẫu Excel)</button>
+    <button class="btn" id="btnReload">↻ Làm mới</button>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="tools">
+    <div class="sbox">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" placeholder="Tìm mặt bằng, mã CN…" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="sp" style="flex:1"></div>
+    <div class="chips" id="colchips"></div>
+    <label class="sw"><input type="checkbox" id="showHid"> Hiện mặt bằng đã ẩn</label>
+  </div>
+
+  <div class="lg">
+    <b>Chú thích:</b>
+    <span><i style="background:var(--done-b);border-color:var(--done)"></i>Đã xong</span>
+    <span><i style="background:var(--doing-b);border-color:var(--doing)"></i>Đang làm</span>
+    <span><i style="background:var(--none-b)"></i>Chưa làm</span>
+    <span><i style="background:var(--na-b)"></i>Không áp dụng</span>
+    <span style="color:var(--tx3)">· Bấm ô để cập nhật · Ô vuông xanh góc trái = mở link Task/Zalo · Chấm xanh góc phải = có ghi chú · Cột Bắt đầu thi công: <b>MT</b> = lấy từ ma trận lịch thi công, <b>TAY</b> = đã sửa tay đè lên</span>
+  </div>
+
+  <div class="tbox" id="tbox"><div class="loading">Đang tải dữ liệu…</div></div>
+</div>
+
+<!-- modal bước -->
+<div class="ov" id="ov">
+  <div class="md">
+    <h3 id="mTitle">Cập nhật bước</h3>
+    <div class="who" id="mWho"></div>
+    <div class="bd">
+      <div class="desc" id="mDesc"></div>
+      <div class="fl">
+        <label>Trạng thái</label>
+        <div class="opts" id="mOpts">
+          <div class="opt" data-v="0">Chưa làm</div>
+          <div class="opt" data-v="1">Đang làm</div>
+          <div class="opt" data-v="2">Đã xong</div>
+          <div class="opt" data-v="3">Không A/D</div>
+        </div>
+      </div>
+      <div class="fl">
+        <label id="mDateLb">Ngày hoàn thành</label>
+        <input type="date" id="mDate">
+      </div>
+      <div class="fl" id="mLinkWrap">
+        <label id="mLinkLb">Link</label>
+        <div class="lrow">
+          <input type="url" id="mLink" placeholder="https://work.hasaki.vn/tasks?task_id=…">
+          <button class="btn" id="mOpen" title="Mở link trong tab mới">↗</button>
+        </div>
+      </div>
+      <div class="fl">
+        <label>Ghi chú</label>
+        <textarea id="mNote" placeholder="Vướng mắc, người phụ trách, số chứng từ…"></textarea>
+      </div>
+    </div>
+    <div class="ft">
+      <button class="btn gh" id="mClear">Xóa dữ liệu ô</button>
+      <div class="sp"></div>
+      <button class="btn" id="mCancel">Hủy</button>
+      <button class="btn pri" id="mSave">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal ngày -->
+<div class="ov" id="ovD">
+  <div class="md" style="max-width:360px">
+    <h3 id="dTitle">Sửa ngày</h3>
+    <div class="who" id="dWho"></div>
+    <div class="bd">
+      <div class="desc" id="dNote"></div>
+      <div class="fl"><label id="dLb">Ngày</label><input type="date" id="dVal"></div>
+    </div>
+    <div class="ft">
+      <button class="btn gh" id="dClear">Xóa ngày</button>
+      <div class="sp"></div>
+      <button class="btn" id="dCancel">Hủy</button>
+      <button class="btn pri" id="dSave">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   Tiến độ thi công mặt bằng — P. Bảo trì Kỹ thuật (Vận hành)
+   Cấu trúc cột bám theo file "thi cong mat bang moi.xlsx".
+   Nguồn: Supabase public.btkt_matbang
+     · tc_progress (jsonb) — của riêng app này:
+         { "<step_key>": { st:0|1|2|3, d:"YYYY-MM-DD", n:"ghi chú", u:"link" } }
+     · khai_truong / nhan_nha — dùng chung với app tiến độ nhận nhà
+     · stages / tien_do — ghi ngược để app cũ vẫn đọc đúng
+   ============================================================ */
+const APP_BUILD='2026-09-05 12:50';   // TĂNG MỖI LẦN SỬA FILE
+
+const SB_URL='https://rnzawekklwfpndgloppw.supabase.co';
+const SB_KEY='sb_publishable_yTWcRJf3fAqaDbTRSM1lfA_gHlUiKNZ';
+const TABLE='btkt_matbang';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+const NEED ={0:21,1:26,2:31};
+const LABEL={0:'Shop',1:'Shop + Fashion',2:'Shop+Fashion+Clinic'};
+const WFG='Đẩy Task WF';
+
+/* 17 cột bước — thứ tự & tên đúng như file Excel đang dùng */
+const STEPS=[
+ {k:'s1',s:'Push NCC nhận mặt bằng',lk:'',
+  d:'Push nhà thầu / chủ nhà chốt ngày bàn giao mặt bằng cho Hasaki.'},
+ {k:'s2',s:'Nhận bàn giao MB',lk:'',
+  d:'Nhận thông tin ngày nhận nhà từ nhóm chủ nhà. Báo ngay Hotosu và Công Phú trên group nội bộ Hotosu thời gian cụ thể để cùng chủ nhà đến kiểm tra và nhận bàn giao mặt bằng.'},
+ {k:'s3',s:'Tạo group Zalo thi công',lk:'zalo',
+  d:'Tạo group Zalo riêng cho chi nhánh (tên group gồm địa chỉ, ngày thi công và ngày dự kiến khai trương). Đưa toàn bộ hình ảnh, biên bản bàn giao nhà vào group. Dán link group vào ô Link.'},
+ {k:'s4',s:'Lắp đặt đồng hồ điện 3 pha',lk:'wf',
+  d:'Check tình trạng đồng hồ thực tế: (1) chưa có → xin cấp mới 3 pha; (2) đã có 1 pha → xin nâng cấp lên 3 pha; (3) cần sang tên → làm chứng từ sang tên. Phối hợp Legal + Hành chính chuẩn bị hồ sơ, thanh toán & ký quỹ; phối hợp chủ nhà/chi nhánh nộp hồ sơ; theo dõi sau ký quỹ và liên hệ thợ điện kéo dây về chi nhánh.'},
+
+ {k:'w0',g:WFG,s:'Thi công chi nhánh mới',lk:'wf',d:'Task WF tổng cho việc thi công chi nhánh mới. Dán link task vào ô Link.'},
+ {k:'w1',g:WFG,s:'Xây dựng',   lk:'wf',d:'Task WF hạng mục Xây dựng. Dán link task vào ô Link.'},
+ {k:'w2',g:WFG,s:'Thạch cao',  lk:'wf',d:'Task WF hạng mục Thạch cao. Dán link task vào ô Link.'},
+ {k:'w3',g:WFG,s:'Cửa cuốn',   lk:'wf',d:'Task WF hạng mục Cửa cuốn. Dán link task vào ô Link.'},
+ {k:'w4',g:WFG,s:'Kính',       lk:'wf',d:'Task WF hạng mục Kính. Dán link task vào ô Link.'},
+ {k:'w5',g:WFG,s:'Logo',       lk:'wf',d:'Task WF hạng mục Logo. Dán link task vào ô Link.'},
+ {k:'w6',g:WFG,s:'Bảng hiệu',  lk:'wf',d:'Task WF hạng mục Bảng hiệu. Dán link task vào ô Link.'},
+ {k:'w7',g:WFG,s:'Rèm',        lk:'wf',d:'Task WF hạng mục Rèm. Dán link task vào ô Link.'},
+
+ {k:'s5',s:'Bóc tách vật tư',lk:'',
+  d:'Ngay khi có bản vẽ từ Hotosu: bóc tách khối lượng vật tư, up thông tin vào file WF đã đẩy trước đó và push Hành chính đặt vật tư để kịp tiến độ thi công.'},
+ {k:'s6',s:'Đẩy Task ODS',lk:'ods',
+  d:'Đẩy Task ODS để đội bảo trì tiến hành thi công các hạng mục theo kế hoạch. Dán link task ODS vào ô Link.'},
+ {k:'s7',s:'Sắp xếp Lịch thi công đội BT',lk:'',
+  d:'Chốt và đẩy lịch thi công chi tiết cho đội bảo trì căn đó.'},
+ {k:'s8',s:'Tạo đơn công tác BT',lk:'',
+  d:'Làm phiếu công tác đầy đủ cho đội bảo trì. Thông tin cho Hành chính nếu có trường hợp cần di chuyển và lưu trú.'},
+ {k:'s9',s:'Giám sát & nghiệm thu',lk:'',
+  d:'Theo dõi sát công trình đến khi hoàn tất. Kiểm tra tiến độ giao nhận vật tư (đúng hẹn hay không) và chủ động push các bên kiểm tra ngày thi công để không bị trễ tiến độ.'},
+];
+/* map ngược về mảng `stages` 7 phần tử của app tiến độ nhận nhà */
+const LEGACY=['w1','w2','w3','w4','w5','w6','s4'];
+const STNAME={0:'Chưa làm',1:'Đang làm',2:'Đã xong',3:'Không áp dụng'};
+const STMARK={0:'·',1:'●',2:'✓',3:'–'};
+const LKICON={wf:'W',ods:'O',zalo:'Z'};
+
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const pad=n=>String(n).padStart(2,'0');
+function isoToD(s){if(!s)return null;const[y,m,d]=String(s).split('-').map(Number);return new Date(y,m-1,d);}
+function dToIso(dt){return dt?dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate()):'';}
+function fmtDM(dt){return dt?pad(dt.getDate())+'/'+pad(dt.getMonth()+1):'—';}
+function fmtDMY(dt){return dt?pad(dt.getDate())+'/'+pad(dt.getMonth()+1)+'/'+dt.getFullYear():'';}
+function diffDays(a,b){return Math.round((a-b)/86400000);}
+function todayISO(){return dToIso(TODAY);}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeUrl(u){u=String(u||'').trim();return /^https?:\/\//i.test(u)?u:'';}
+
+/* --- khớp tên công trình ma trận ↔ mặt bằng: y hệt luật tourMBFind của app tiến độ nhận nhà --- */
+const MB_STOP=new Set('phuong xa tinh thanh pho tp khu duong so fashion shop clinic relayout cai tao quan huyen thi tran cua hang'.split(' '));
+function norm(x){return (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();}
+function mbTokens(x){return norm(x).split(' ').filter(w=>w.length>=2&&!MB_STOP.has(w));}
+
+let recs=[], TOUR=[], filter='all', colMode='all', showHid=false, q='';
+let cur={id:null,key:null}, curD={id:null,field:null};
+
+/* ---------------- load ---------------- */
+async function loadData(silent){
+  const box=document.getElementById('tbox');
+  if(!silent)box.innerHTML='<div class="loading">Đang tải dữ liệu…</div>';
+  const [mb,tr]=await Promise.all([
+    sb.from(TABLE).select('*'),
+    sb.from('btkt_tour').select('cong_trinh,bat_dau,khai_truong,ten')
+  ]);
+  if(mb.error){box.innerHTML='<div class="empty">Lỗi tải dữ liệu: '+esc(mb.error.message)+'</div>';return;}
+  TOUR=tr&&!tr.error?(tr.data||[]):[];
+  recs=(mb.data||[]).map(mapRow).sort(cmp);
+  linkTour();
+  render();
+}
+/* Ngày bắt đầu thi công: mặc định LẤY TỪ MA TRẬN LỊCH THI CÔNG (btkt_tour.bat_dau).
+   Cột bat_dau_tc chỉ là ngày sửa tay, khi có thì đè lên ngày ma trận. */
+function calcSched(r){
+  r.bdau=r.bdauMan||r.bdauTour||null;
+  r.bdauSrc=r.bdauMan?'man':(r.bdauTour?'mt':'');
+  /* Quỹ ngày NHẬN NHÀ → KHAI TRƯƠNG vẫn là thước đo trễ (rule 21/26/31 của kế hoạch mặt bằng).
+     Ngày bắt đầu thi công là chuyến của đội BT trong ma trận (chỉ 12–14 ngày) nên KHÔNG
+     đem so với 21/26/31 — nó dùng để biết đã khởi công chưa và còn mấy ngày thi công. */
+  r.thicong=(r.nhan&&r.khai)?diffDays(r.khai,r.nhan)-1:null;
+  r.tcThuc =(r.bdau&&r.khai)?diffDays(r.khai,r.bdau):null;   /* độ dài chuyến thi công */
+  r.dToBd  = r.bdau?diffDays(r.bdau,TODAY):null;             /* còn mấy ngày nữa khởi công */
+  r.dangTC = !!(r.bdau&&r.bdau<=TODAY&&(!r.khai||r.khai>=TODAY));
+  r.tre=0;
+  if(!r.nhan){r.cat='post';r.label='Chưa có ngày nhận nhà';}
+  else{
+    r.tre=r.need-r.thicong;
+    if(r.khai&&r.khai<TODAY){r.cat='open';r.label='Đã khai trương';}
+    else if(r.tre>0){r.cat='late';r.label='Thiếu '+r.tre+' ngày';}
+    else{r.cat='soon';r.label='Đúng tiến độ';}
+  }
+  return r;
+}
+function mapRow(row){
+  const nhan=isoToD(row.nhan_nha), khai=isoToD(row.khai_truong);
+  const loai=row.loai||0, need=NEED[loai]??21;
+  const raw=(row.tc_progress&&typeof row.tc_progress==='object')?row.tc_progress:{};
+  const legacy=Array.isArray(row.stages)?row.stages:[];
+  const p={};
+  STEPS.forEach(s=>{
+    const v=raw[s.k];
+    if(v&&typeof v==='object'){
+      p[s.k]={st:Number(v.st)||0,d:v.d||'',n:v.n||'',u:v.u||''};
+    }else{
+      const li=LEGACY.indexOf(s.k);   /* kế thừa tick cũ trên cột stages */
+      p[s.k]={st:(li>=0&&legacy[li])?2:0,d:'',n:'',u:''};
+    }
+  });
+  const tot=STEPS.filter(s=>p[s.k].st!==3).length;
+  const dn=STEPS.filter(s=>p[s.k].st===2).length;
+  return calcSched({id:row.id,stt:row.stt,ten:row.ten||'(chưa đặt tên)',loai,cnCode:row.cn_code||'',
+          nhan,khai,need,an:!!row.an,p,
+          bdauMan:isoToD(row.bat_dau_tc),bdauTour:null,tour:null,
+          pct:tot?Math.round(dn/tot*100):0,dn,tot,
+          dToKhai:khai?diffDays(khai,TODAY):null});
+}
+/* Ghép từng chuyến trong ma trận lịch thi công với mặt bằng, lấy bat_dau sớm nhất của chuyến */
+function linkTour(){
+  const live=new Date(TODAY);live.setDate(live.getDate()-14);
+  const G={};
+  TOUR.forEach(t=>{
+    if(!t.cong_trinh||!t.bat_dau)return;
+    const k=t.cong_trinh+'|'+(t.khai_truong||'');
+    const g=G[k]||(G[k]={ten:t.cong_trinh,kt:t.khai_truong||'',bd:t.bat_dau,ns:[]});
+    if(t.bat_dau<g.bd)g.bd=t.bat_dau;
+    if(t.ten&&g.ns.indexOf(t.ten)<0)g.ns.push(t.ten);
+  });
+  const map={};
+  Object.values(G).forEach(g=>{
+    if(g.kt&&isoToD(g.kt)<live)return;                       /* không đụng chuyến đã quá cũ */
+    const nt=mbTokens(g.ten);if(!nt.length)return;
+    const sc=recs.map(r=>{const rt=new Set(mbTokens(r.ten));let n=0;nt.forEach(w=>{if(rt.has(w))n++;});return{r,n};})
+                 .sort((a,b)=>b.n-a.n);
+    const need=Math.max(Math.min(3,nt.length),Math.ceil(nt.length*0.7)); /* phủ ≥70% từ khoá */
+    if(!sc.length||sc[0].n<need||(sc[1]&&sc[1].n===sc[0].n))return;      /* trùng điểm thì không đoán */
+    const r=sc[0].r, dist=x=>(r.khai&&x.kt)?Math.abs(diffDays(isoToD(x.kt),r.khai)):9999;
+    if(!map[r.id]||dist(g)<dist(map[r.id]))map[r.id]=g;
+  });
+  recs.forEach(r=>{const g=map[r.id]||null;r.tour=g;r.bdauTour=g?isoToD(g.bd):null;calcSched(r);});
+}
+function cmp(a,b){
+  const av=a.khai?a.khai.getTime():Infinity, bv=b.khai?b.khai.getTime():Infinity;
+  if(av!==bv)return av-bv;
+  return (a.stt||0)-(b.stt||0);
+}
+
+/* ---------------- filters ---------------- */
+function visible(){
+  let r=recs.filter(x=>showHid||!x.an);
+  if(filter==='late')      r=r.filter(x=>x.cat==='late');
+  else if(filter==='soon') r=r.filter(x=>x.dToKhai!=null&&x.dToKhai>=0&&x.dToKhai<=14);
+  else if(filter==='run')  r=r.filter(x=>x.cat!=='open');
+  else if(filter==='open') r=r.filter(x=>x.cat==='open');
+  else if(filter==='stuck')r=r.filter(x=>x.cat!=='open'&&x.nhan&&x.pct<100);
+  if(q){const t=q.toLowerCase().trim();r=r.filter(x=>(x.ten+' '+x.cnCode).toLowerCase().includes(t));}
+  return r;
+}
+function cols(){
+  if(colMode==='wf')  return STEPS.filter(s=>s.g===WFG);
+  if(colMode==='main')return STEPS.filter(s=>s.g!==WFG);
+  return STEPS;
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  document.getElementById('sub').innerHTML=
+    '📅 '+TODAY.toLocaleDateString('vi-VN',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'})+
+    ' · '+recs.filter(x=>!x.an).length+' mặt bằng · '+STEPS.length+' bước · nguồn: Supabase <span class="bld">· bản '+APP_BUILD+'</span>';
+  renderChips();renderKpi();renderTable();
+}
+
+function renderChips(){
+  const base=recs.filter(x=>showHid||!x.an);
+  const cnt={
+    all:base.length,
+    run:base.filter(x=>x.cat!=='open').length,
+    soon:base.filter(x=>x.dToKhai!=null&&x.dToKhai>=0&&x.dToKhai<=14).length,
+    late:base.filter(x=>x.cat==='late').length,
+    stuck:base.filter(x=>x.cat!=='open'&&x.nhan&&x.pct<100).length,
+    open:base.filter(x=>x.cat==='open').length,
+  };
+  const defs=[['all','Tất cả'],['run','Đang triển khai'],['soon','Khai trương ≤14 ngày'],
+              ['late','Thiếu ngày thi công'],['stuck','Đã nhận nhà, chưa xong'],['open','Đã khai trương']];
+  document.getElementById('chips').innerHTML=defs.map(([k,l])=>
+    `<div class="chip ${filter===k?'on':''}" data-f="${k}">${l}<span class="c">${cnt[k]}</span></div>`).join('');
+  document.getElementById('colchips').innerHTML=
+    [['all','Tất cả '+STEPS.length+' cột'],['main','Bỏ nhóm Task WF'],['wf','Chỉ Task WF']].map(([k,l])=>
+    `<div class="chip ${colMode===k?'on':''}" data-c="${k}">${l}</div>`).join('');
+}
+
+function renderKpi(){
+  const b=recs.filter(x=>!x.an&&x.cat!=='open');
+  const avg=b.length?Math.round(b.reduce((s,x)=>s+x.pct,0)/b.length):0;
+  const soon=b.filter(x=>x.dToKhai!=null&&x.dToKhai>=0&&x.dToKhai<=14);
+  const soonBad=soon.filter(x=>x.pct<80).length;
+  const late=b.filter(x=>x.cat==='late').length;
+  const pool=b.filter(x=>x.nhan);
+  let worst={n:'—',c:0};
+  STEPS.forEach(s=>{const c=pool.filter(x=>x.p[s.k].st===0).length;if(c>worst.c)worst={n:s.s,c};});
+  const noTour=b.filter(x=>!x.tour).length;
+  const running=b.filter(x=>x.dangTC).length;
+  const startSoon=b.filter(x=>x.dToBd!=null&&x.dToBd>0&&x.dToBd<=7).length;
+  const startBad=b.filter(x=>x.dToBd!=null&&x.dToBd<=7&&x.p['s6'].st!==2).length;
+  document.getElementById('kpis').innerHTML=[
+    ['Mặt bằng đang chạy',b.length,'chưa khai trương',''],
+    ['Hoàn thành trung bình',avg+'%',b.length+' mặt bằng đang chạy',avg>=70?'ok':''],
+    ['Khai trương ≤ 14 ngày',soon.length,soonBad?soonBad+' cái tiến độ dưới 80%':'đều trên 80%',soonBad?'warn':'ok'],
+    ['Thiếu ngày thi công',late,'quỹ ngày tới khai trương không đủ',late?'warn':'ok'],
+    ['Đang thi công',running,'đội BT đã vào công trình',''],
+    ['Khởi công trong 7 ngày',startSoon,startBad?startBad+' cái chưa đẩy Task ODS':'đã đẩy Task ODS đủ',startBad?'warn':'ok'],
+    ['Chưa có trong ma trận',noTour,noTour?'chưa xếp chuyến thi công':'đã xếp lịch đủ',noTour?'warn':'ok'],
+    ['Bước tắc nhiều nhất',worst.c,worst.n,worst.c?'warn':''],
+  ].map(([l,v,n,c])=>`<div class="kpi ${c}"><div class="lb">${l}</div><div class="vl">${v}</div><div class="nt">${esc(n)}</div></div>`).join('');
+}
+
+function bdSub(r){
+  if(!r.bdau)return '';
+  if(r.dToBd>0)  return `<span class="d2">còn ${r.dToBd} ngày</span>`;
+  if(r.dangTC)   return `<span class="d2" style="color:var(--doing)">TC ngày ${-r.dToBd+1}/${r.tcThuc||'?'}</span>`;
+  return `<span class="d2">chuyến ${r.tcThuc!=null?r.tcThuc+' ngày':'—'}</span>`;
+}
+function vt(s){return `<div class="vt">${esc(s.s)}</div>`;}
+
+function renderTable(){
+  const rows=visible(), cs=cols();
+  const box=document.getElementById('tbox');
+  if(!rows.length){box.innerHTML='<div class="empty">Không có mặt bằng nào khớp bộ lọc.</div>';return;}
+
+  /* header: cột lẻ merge dọc 2 hàng, nhóm "Đẩy Task WF" merge ngang */
+  let g1='',g2='',i=0;
+  while(i<cs.length){
+    const s=cs[i];
+    if(!s.g){g1+=`<th rowspan="2" class="solo" title="${esc(s.s)}">${vt(s)}</th>`;i++;}
+    else{
+      let j=i;while(j<cs.length&&cs[j].g===s.g)j++;
+      g1+=`<th colspan="${j-i}" class="grp ${j<cs.length?'sep':''}">${esc(s.g)}</th>`;
+      for(let k=i;k<j;k++)g2+=`<th class="${k===j-1&&j<cs.length?'sep':''}" title="${esc(cs[k].s)}">${vt(cs[k])}</th>`;
+      i=j;
+    }
+  }
+
+  const body=rows.map(r=>{
+    const cls=r.pct>=80?'':(r.pct>=40?'mid':'low');
+    const tre=r.cat==='late'?`<span class="tg late">${esc(r.label)}</span>`
+             :r.cat==='soon'?`<span class="tg soon">${r.dToKhai!=null?'Còn '+r.dToKhai+' ngày':'Đúng tiến độ'}</span>`
+             :r.cat==='open'?`<span class="tg open">Đã khai trương</span>`
+             :`<span class="tg post">Chưa có ngày nhận nhà</span>`;
+    const c0=`<td class="c0"><div class="mbc">
+        <div class="mbn"><span class="st">${r.stt??''}</span><span>${esc(r.ten)}</span></div>
+        <div class="mbm"><span class="tg typ">${LABEL[r.loai]||'Shop'}</span>${r.cnCode?`<span class="tg open">${esc(r.cnCode)}</span>`:''}${tre}${r.dangTC?'<span class="tg tc">Đang thi công</span>':''}<span class="pct">${r.pct}% · ${r.dn}/${r.tot}</span></div>
+        <div class="bar ${cls}"><i style="width:${r.pct}%"></i></div>
+      </div></td>`;
+    const c1=`<td class="c1"><button class="dcell ${r.khai?'':'miss'}" data-d="khai" data-id="${r.id}">
+        <span class="d1">${r.khai?fmtDMY(r.khai):'— thêm —'}</span>${r.dToKhai!=null&&r.dToKhai>=0?`<span class="d2">còn ${r.dToKhai} ngày</span>`:''}</button></td>`;
+    const c2=`<td class="c2"><button class="dcell ${r.nhan?'':'miss'}" data-d="nhan" data-id="${r.id}">
+        <span class="d1">${r.nhan?fmtDMY(r.nhan):'— thêm —'}</span>${r.thicong!=null?`<span class="d2">${r.thicong} ngày TC</span>`:''}</button></td>`;
+    const c3=`<td class="c3"><button class="dcell ${r.bdau?'':'miss'}" data-d="bdau" data-id="${r.id}"
+        title="${r.tour?esc('Ma trận: '+r.tour.ten+' · đội: '+(r.tour.ns.join(', ')||'—')):'Chưa khớp được chuyến nào trong ma trận lịch thi công'}">
+        ${r.bdauSrc?`<span class="src ${r.bdauSrc}">${r.bdauSrc==='mt'?'MT':'TAY'}</span>`:''}
+        <span class="d1">${r.bdau?fmtDMY(r.bdau):'— chưa xếp —'}</span>${bdSub(r)}</button></td>`;
+    const cells=cs.map((s,ix)=>{
+      const v=r.p[s.k], nx=cs[ix+1];
+      const dd=v.d?fmtDM(isoToD(v.d)):'';
+      const u=safeUrl(v.u);
+      const lk=u?`<a class="lk ${s.lk==='zalo'?'zl':''}" href="${esc(u)}" target="_blank" rel="noopener" title="Mở ${s.lk==='zalo'?'group Zalo':'task'}">${LKICON[s.lk]||'↗'}</a>`:'';
+      return `<td class="s${v.st} ${nx&&nx.g!==s.g?'sep':''}">
+        <button class="cell" data-id="${r.id}" data-k="${s.k}" title="${esc(s.s)} — ${STNAME[v.st]}${v.n?' · '+esc(v.n):''}">
+          ${lk}${v.n?'<span class="nz"></span>':''}
+          <span class="mk">${STMARK[v.st]}</span>${dd?`<span class="dd">${dd}</span>`:''}
+        </button></td>`;
+    }).join('');
+    return `<tr class="${r.an?'hid':''}">${c0}${c1}${c2}${c3}${cells}</tr>`;
+  }).join('');
+
+  const cg=`<colgroup><col style="width:296px"><col style="width:80px"><col style="width:80px"><col style="width:104px">${cs.map(()=>'<col style="width:46px">').join('')}</colgroup>`;
+  box.innerHTML=`<table>${cg}
+    <thead>
+      <tr class="g">
+        <th class="c0" rowspan="2">Mặt bằng / chi nhánh</th>
+        <th class="c1" rowspan="2">Ngày khai trương</th>
+        <th class="c2" rowspan="2">Nhận nhà</th>
+        <th class="c3 sep" rowspan="2">Bắt đầu thi công</th>
+        ${g1}
+      </tr>
+      ${g2?`<tr class="s">${g2}</tr>`:''}
+    </thead>
+    <tbody>${body}</tbody></table>`;
+}
+
+/* ---------------- modal bước ---------------- */
+function openCell(id,key){
+  const r=recs.find(x=>x.id==id);if(!r)return;
+  const s=STEPS.find(x=>x.k===key);if(!s)return;
+  cur={id:r.id,key};
+  const v=r.p[key];
+  document.getElementById('mTitle').textContent=(s.g?s.g+' · ':'')+s.s;
+  document.getElementById('mWho').innerHTML=`<b>${esc(r.ten)}</b> · ${LABEL[r.loai]||'Shop'}`+
+    (r.cnCode?' · '+esc(r.cnCode):'')+`<br>Nhận nhà ${fmtDMY(r.nhan)||'—'} → Khai trương ${fmtDMY(r.khai)||'—'}`;
+  document.getElementById('mDesc').textContent=s.d;
+  setOpt(v.st);
+  document.getElementById('mDate').value=v.d||'';
+  document.getElementById('mLink').value=v.u||'';
+  document.getElementById('mNote').value=v.n||'';
+  const lb=document.getElementById('mLinkLb');
+  lb.textContent=s.lk==='zalo'?'Link group Zalo':s.lk==='ods'?'Link Task ODS':s.lk==='wf'?'Link Task WF':'Link (nếu có)';
+  document.getElementById('mLink').placeholder=s.lk==='zalo'?'https://zalo.me/g/…':'https://work.hasaki.vn/tasks?task_id=…';
+  document.getElementById('ov').classList.add('on');
+  setTimeout(()=>document.getElementById('mNote').focus(),40);
+}
+function setOpt(val){
+  document.querySelectorAll('#mOpts .opt').forEach(o=>o.classList.toggle('on',Number(o.dataset.v)===Number(val)));
+  document.getElementById('mDateLb').textContent=Number(val)===1?'Ngày bắt đầu':'Ngày hoàn thành';
+}
+function curOpt(){const o=document.querySelector('#mOpts .opt.on');return o?Number(o.dataset.v):0;}
+function closeModal(){document.getElementById('ov').classList.remove('on');cur={id:null,key:null};}
+
+function buildPayload(r){
+  const stages=LEGACY.map(k=>r.p[k].st===2);
+  const tc={};
+  STEPS.forEach(s=>{const v=r.p[s.k];if(v.st||v.d||v.n||v.u)tc[s.k]=v;});
+  return {tc_progress:tc,stages,
+          tien_do:Math.round(stages.filter(Boolean).length/LEGACY.length*100),
+          updated_at:new Date().toISOString()};
+}
+function recalc(r){
+  const tot=STEPS.filter(s=>r.p[s.k].st!==3).length;
+  r.dn=STEPS.filter(s=>r.p[s.k].st===2).length;r.tot=tot;
+  r.pct=tot?Math.round(r.dn/tot*100):0;
+}
+async function saveCell(clear){
+  const r=recs.find(x=>x.id==cur.id);if(!r)return;
+  r.p[cur.key]=clear?{st:0,d:'',n:'',u:''}
+    :{st:curOpt(),d:document.getElementById('mDate').value,
+      n:document.getElementById('mNote').value.trim(),
+      u:document.getElementById('mLink').value.trim()};
+  const btn=document.getElementById('mSave');btn.disabled=true;
+  const {error}=await sb.from(TABLE).update(buildPayload(r)).eq('id',r.id);
+  btn.disabled=false;
+  if(error){toast('Lưu thất bại: '+error.message,true);return;}
+  recalc(r);closeModal();render();toast(clear?'Đã xóa dữ liệu ô':'Đã lưu');
+}
+
+/* ---------------- modal ngày ---------------- */
+const DFIELD={khai:['Ngày khai trương','khai_truong'],nhan:['Ngày nhận nhà','nhan_nha'],bdau:['Ngày bắt đầu thi công','bat_dau_tc']};
+function openDate(id,field){
+  const r=recs.find(x=>x.id==id);if(!r)return;
+  curD={id:r.id,field};
+  const nm=DFIELD[field][0];
+  document.getElementById('dTitle').textContent=nm;
+  document.getElementById('dLb').textContent=nm;
+  document.getElementById('dWho').innerHTML=`<b>${esc(r.ten)}</b> · ${LABEL[r.loai]||'Shop'} · cần ${r.need} ngày thi công`+
+    (r.khai?`<br>Khai trương ${fmtDMY(r.khai)}`:'');
+  const isB=field==='bdau';
+  document.getElementById('dNote').innerHTML=isB
+    ? (r.tour
+        ? `Ma trận lịch thi công: <b>${esc(r.tour.ten)}</b><br>Bắt đầu <b>${fmtDMY(r.bdauTour)}</b> · đội: ${esc(r.tour.ns.join(', ')||'—')}<br><br>Để trống ô dưới thì app dùng thẳng ngày này. Chỉ điền khi muốn <b>đè</b> ngày ma trận (thi công thực tế lệch lịch).`
+        : `Chưa khớp được mặt bằng này với chuyến nào trong ma trận lịch thi công — có thể chưa xếp chuyến, hoặc tên trong ma trận khác quá nhiều so với tên mặt bằng. Điền tay ở dưới nếu đã biết ngày.`)
+    : 'Ngày này nằm trên bảng mặt bằng dùng chung — sửa ở đây thì app tiến độ nhận nhà cũng đổi theo.';
+  document.getElementById('dLb').textContent=isB?'Ngày sửa tay (đè ngày ma trận)':nm;
+  document.getElementById('dClear').textContent=isB?'Dùng ngày ma trận':'Xóa ngày';
+  document.getElementById('dVal').value=dToIso(field==='khai'?r.khai:field==='nhan'?r.nhan:r.bdauMan);
+  document.getElementById('ovD').classList.add('on');
+}
+function closeDate(){document.getElementById('ovD').classList.remove('on');curD={id:null,field:null};}
+async function saveDate(clear){
+  const r=recs.find(x=>x.id==curD.id);if(!r)return;
+  const val=clear?null:(document.getElementById('dVal').value||null);
+  const col=DFIELD[curD.field][1];
+  const btn=document.getElementById('dSave');btn.disabled=true;
+  const {error}=await sb.from(TABLE).update({[col]:val,updated_at:new Date().toISOString()}).eq('id',r.id);
+  btn.disabled=false;
+  if(error){toast('Lưu thất bại: '+error.message,true);return;}
+  closeDate();await loadData(true);toast('Đã lưu ngày');
+}
+
+let tmr;
+function toast(m,err){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.toggle('err',!!err);t.classList.add('on');
+  clearTimeout(tmr);tmr=setTimeout(()=>t.classList.remove('on'),2200);
+}
+
+/* ---------------- CSV: đúng mẫu file Excel ---------------- */
+function exportCsv(){
+  const cs=cols(),rows=visible();
+  const r1=['Mặt bằng / chi nhánh','Ngày khai trương','Nhận nhà','Bắt đầu thi công'];
+  const r2=['','','',''];
+  cs.forEach(s=>{r1.push(s.g||s.s);r2.push(s.g?s.s:'');});
+  r1.push('Ghi chú');r2.push('');
+  const lines=[r1,r2];
+  rows.forEach(r=>{
+    const l=[r.ten,fmtDMY(r.khai),fmtDMY(r.nhan),fmtDMY(r.bdau)];
+    const notes=[];
+    cs.forEach(s=>{
+      const v=r.p[s.k],u=safeUrl(v.u);
+      if(v.n)notes.push(s.s+': '+v.n);
+      if(u)l.push(u);
+      else if(v.st===2)l.push('Done'+(v.d?' - '+fmtDMY(isoToD(v.d)):''));
+      else if(v.st===1)l.push('Đang làm'+(v.d?' - '+fmtDMY(isoToD(v.d)):''));
+      else if(v.st===3)l.push('N/A');
+      else l.push('');
+    });
+    l.push(notes.join(' | '));
+    lines.push(l);
+  });
+  const csv='﻿'+lines.map(l=>l.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='thi_cong_mat_bang_moi_'+todayISO()+'.csv';a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+
+/* ---------------- events ---------------- */
+document.getElementById('chips').addEventListener('click',e=>{
+  const c=e.target.closest('.chip');if(!c)return;filter=c.dataset.f;render();});
+document.getElementById('colchips').addEventListener('click',e=>{
+  const c=e.target.closest('.chip');if(!c)return;colMode=c.dataset.c;render();});
+document.getElementById('tbox').addEventListener('click',e=>{
+  if(e.target.closest('.lk'))return;               /* để link tự mở */
+  const d=e.target.closest('.dcell');
+  if(d){openDate(d.dataset.id,d.dataset.d);return;}
+  const b=e.target.closest('.cell');if(b)openCell(b.dataset.id,b.dataset.k);});
+document.getElementById('q').addEventListener('input',e=>{q=e.target.value;renderTable();});
+document.getElementById('showHid').addEventListener('change',e=>{showHid=e.target.checked;render();});
+document.getElementById('btnReload').addEventListener('click',()=>loadData());
+document.getElementById('btnCsv').addEventListener('click',exportCsv);
+
+document.getElementById('mOpts').addEventListener('click',e=>{
+  const o=e.target.closest('.opt');if(!o)return;
+  setOpt(o.dataset.v);
+  const dt=document.getElementById('mDate');
+  if(Number(o.dataset.v)===2&&!dt.value)dt.value=todayISO();
+});
+document.getElementById('mLink').addEventListener('input',e=>{
+  if(safeUrl(e.target.value)&&curOpt()===0)setOpt(1);   /* có link = đã đẩy task → đang làm */
+});
+document.getElementById('mOpen').addEventListener('click',()=>{
+  const u=safeUrl(document.getElementById('mLink').value);
+  if(u)window.open(u,'_blank','noopener');else toast('Chưa có link hợp lệ',true);
+});
+document.getElementById('mCancel').addEventListener('click',closeModal);
+document.getElementById('mSave').addEventListener('click',()=>saveCell(false));
+document.getElementById('mClear').addEventListener('click',()=>saveCell(true));
+document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal();});
+
+document.getElementById('dCancel').addEventListener('click',closeDate);
+document.getElementById('dSave').addEventListener('click',()=>saveDate(false));
+document.getElementById('dClear').addEventListener('click',()=>saveDate(true));
+document.getElementById('ovD').addEventListener('click',e=>{if(e.target.id==='ovD')closeDate();});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModal();closeDate();}
+  if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){
+    if(document.getElementById('ov').classList.contains('on'))saveCell(false);
+    else if(document.getElementById('ovD').classList.contains('on'))saveDate(false);
+  }
+});
+
+sb.channel('tc-matbang')
+  .on('postgres_changes',{event:'*',schema:'public',table:TABLE},()=>{
+    if(!document.getElementById('ov').classList.contains('on')&&
+       !document.getElementById('ovD').classList.contains('on'))loadData(true);
+  }).subscribe();
+
+loadData();
+</script>
+</body>
+</html>
